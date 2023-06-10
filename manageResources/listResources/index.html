@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeStructure</title>
+
+    <!--Boostrap links-->
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const type = urlParams.get('t');
+
+        switch (type) {
+            case 'resourceGroups':
+                resourceName = 'Resource Groups'
+                break;
+            case 'virtualNetworks':
+                resourceName = 'Virtual Networks'
+                break;
+            case 'storageAccounts':
+                resourceName = 'Resource Groups'
+                break;
+            case 'keyVault':
+                resourceName = 'Resource Groups'
+                break;
+            case 'automationAccount':
+                resourceName = 'Resource Groups'
+                break;
+            
+        }
+
+        const creatingResourceFilePath = './listResources/forms/'+type+'.html'
+        const editingResourceFilePath = './listResources/forms/edit'+type+'.html'
+        const removingResourceFilePath = './listResources/forms/removeResources.html'
+
+        fetch(creatingResourceFilePath)
+            .then(response => response.text())
+            .then(html => {
+                const form = document.getElementById('addingResourceForm');
+                form.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+        });
+
+        fetch(editingResourceFilePath)
+            .then(response => response.text())
+            .then(html => {
+                const form = document.getElementById('editingResourceForm');
+                form.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+        });
+
+        fetch(removingResourceFilePath)
+            .then(response => response.text())
+            .then(html => {
+                const form = document.getElementById('removingResourceForm');
+                form.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+        });
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            const tValueElements = document.querySelectorAll('.tValue');
+            tValueElements.forEach(function(element) {
+                element.textContent = resourceName;
+            });
+        });
+    </script>
+
+</head>
+<body>
+<!-- Navbar -->
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">CodeStructure</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="/">Strona główna</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="/manageResources">Zarządzanie zasobami<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/authorization">Autoryzacja</a>
+            </li>
+          </ul>
+        </div>
+        <div class="form-group">
+          <select class="form-control" id="exampleFormControlSelect1">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select>
+        </div>
+    </nav>
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/manageResources">Wszystkie zasoby</a></li>
+        <li class="breadcrumb-item" aria-current="page"><span class="tValue"></span></li>
+      </ol>
+    </nav>
+<!-- Page content -->
+    <div class="container">
+        <div class="row">
+          <div class="col-12">
+            
+            <br>
+            <h2>
+                <span class="tValue"></span>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addingResource">+ Dodaj</button>
+            </h2>
+            <br>
+
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nazwa</th>
+                    <th scope="col">Lokalizacja</th>
+                    <th scope="col">Data dodania</th>
+                    <th scope="col">Akcje</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>rg-we-app-001</td>
+                    <td>westeurope</td>
+                    <td>13:28, 06-06-2023</td>
+                    <td class="actionTd">
+                        <button type="button" class="btn btn-secondary editingResources" data-toggle="modal" data-target="#editingResources">Edytuj</button>
+                        <button type="button" class="btn btn-danger removingResources" data-toggle="modal" data-target="#removingResources">Usuń</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td>rg-we-app-002</td>
+                    <td>westeurope</td>
+                    <td>13:34, 06-06-2023</td>
+                    <td class="actionTd">
+                        <button type="button" class="btn btn-secondary editingResources" data-toggle="modal" data-target="#editingResources">Edytuj</button>
+                        <button type="button" class="btn btn-danger removingResources" data-toggle="modal" data-target="#removingResources">Usuń</button>
+                    </td>
+                  </tr>
+                </tbody>
+            </table>
+
+            <script>
+                const table = document.querySelector('table');
+                table.addEventListener('click', function(event) {
+                if (event.target.classList.contains('editingResources')) {
+                    const row = event.target.closest('tr');
+                    const tds = row.querySelectorAll('td');
+                    const values = Array.from(tds).map(td => td.dataset.value || td.textContent);
+
+                    const editingModalTitle = document.getElementById('editingResourcesLabel');
+                    editingModalTitle.innerText = 'Edytowanie zasobu - '+values[0]
+                }
+
+                if (event.target.classList.contains('removingResources')) {
+                    const row = event.target.closest('tr');
+                    const tds = row.querySelectorAll('td');
+                    const values = Array.from(tds).map(td => td.dataset.value || td.textContent);
+
+                    const removingModalTitle = document.getElementById('removingResourcesLabel');
+                    removingModalTitle.innerText = 'Usuwanie zasobu - '+values[0]
+                }
+                });
+            </script>
+
+          </div>
+        </div>
+
+        <div class="container footer">
+            <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+              <div class="col-md-12 d-flex align-items-center">
+                <span class="mb-3 mb-md-0 text-body-secondary">© 2023 Michał Henicz</span>
+              </div>
+            </footer>
+        </div>
+
+    </div>
+
+
+    <!--Modals-->
+
+    <!--Creating resources-->
+    <div class="modal fade" id="addingResource" tabindex="-1" role="dialog" aria-labelledby="addingCredentialsLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title" id="addingCredentialsLabel">Dodawanie nowego zasobu</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+
+            </div>
+
+            <div class="modal-body" id="addingResourceForm"></div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+              <button type="button" class="btn btn-success">Dodaj</button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <!--Editing resources-->
+    <div class="modal fade" id="editingResources" tabindex="-1" role="dialog" aria-labelledby="editingResourcesLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            
+          <div class="modal-content">
+
+            <div class="modal-header">
+              
+              <h5 class="modal-title" id="editingResourcesLabel"></h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+
+            </div>
+
+            <div class="modal-body" id="editingResourceForm"></div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+              <button type="button" class="btn btn-success">Dodaj</button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <!--Removing resources-->
+    <div class="modal fade" id="removingResources" tabindex="-1" role="dialog" aria-labelledby="removingResourcesLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            
+          <div class="modal-content">
+
+            <div class="modal-header">
+              
+              <h5 class="modal-title" id="removingResourcesLabel"></h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+
+            </div>
+
+            <div class="modal-body" id="removingResourceForm"></div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+              <button type="button" class="btn btn-success">Dodaj</button>
+            </div>
+          </div>
+        </div>
+    </div>
+</body>
+</html>
